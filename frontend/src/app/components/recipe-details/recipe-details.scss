@@ -1,0 +1,272 @@
+
+.cafe-recipe-details-page {
+  font-family: 'Playfair Display', serif;
+  color: #4b3621; /* dark coffee text */
+  background: #FEFBF7; /* very light coffee background */
+  min-height: 100vh;
+  
+}
+.back-menu{
+  font-family: 'Playfair Display', serif;
+  color: #4b3621; /* dark coffee text */
+  background: #FEFBF7; /* very light coffee background */
+}
+/* TITLE */
+.veg-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #fff;
+}
+
+/* Veg = Green */
+.veg {
+  background-color: #28a745; // Bootstrap success green
+}
+
+/* Non-Veg = Red */
+.non-veg {
+  background-color: #dc3545; // Bootstrap danger red
+}
+.recipe-title {
+  font-size: 2.6rem;
+  font-weight: 700;
+  color: var(--cafe-gold);
+}
+.price-badge{
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--cafe-dark);
+}
+.btn-back{
+    font-size: 0.75rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  background-color: #2f1b0f;
+  padding: 8px;
+  border-radius: 10px;
+  color: #fff;
+}
+/* CATEGORY BADGE */
+
+.recipe-category-badge {
+  background: linear-gradient(
+    135deg,
+    var(--cafe-gold) 0%,
+    var(--cafe-gold-dark) 100%
+  );
+  color: white;
+  padding: 0.6rem 1.4rem;
+  border-radius: 25px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+/* IMAGE */
+
+.recipe-image-card {
+  background: transparent;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px var(--cafe-shadow);
+  position: relative;
+  // aspect-ratio: 16 / 9; /* Natural banner proportions */
+}
+
+.recipe-banner-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease, filter 0.3s ease;
+}
+
+.recipe-image-card:hover .recipe-banner-img {
+  transform: scale(1.05);
+  filter: brightness(1.1) contrast(1.05);
+}
+
+/* Responsive - Maintain proportions, no stretch */
+@media (max-width: 768px) {
+  .recipe-image-card {
+    aspect-ratio: 4 / 3; /* Slightly taller for mobile */
+    max-height: 280px;
+  }
+  
+  .recipe-banner-img {
+    object-position: center center;
+  }
+}
+
+@media (max-width: 480px) {
+  .recipe-image-card {
+    aspect-ratio: 5 / 4;
+    max-height: 250px;
+  }
+}
+
+/* TIME INFO */
+
+.recipe-info-card {
+  background: transparent;
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 10px 25px var(--cafe-shadow);
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-evenly;
+  font-size: 1.05rem;
+}
+
+.info-row span {
+  color: var(--cafe-brown);
+}
+
+.info-row strong {
+  font-weight: 600;
+}
+
+/* COMMON CARD */
+
+.recipe-card {
+  background: transparent;
+  border-radius: 20px;
+  padding: 1.6rem;
+  box-shadow: 0 10px 25px var(--cafe-shadow);
+}
+
+.section-title {
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+  color: var(--cafe-dark);
+}
+
+/* LISTS */
+
+ol,
+ul {
+  padding-left: 1.4rem;
+}
+
+li {
+  margin-bottom: 0.5rem;
+  color: var(--cafe-brown);
+}
+
+/* MOBILE */
+
+@media (max-width: 768px) {
+
+  .recipe-title {
+    font-size: 2rem;
+  }
+
+  .recipe-banner-img {
+    height: 260px;
+  }
+
+}
+.recipe-category-card {
+  background: #F5EFE6; /* light coffee / latte color */
+  padding: 0px 20px;
+  border-radius: 14px;
+  box-shadow: 0 6px 16px var(--cafe-shadow);
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #4b3621; /* dark coffee text */
+  display: inline-block;
+  letter-spacing: 0.4px;
+  border: 1px solid rgba(139, 94, 60, 0.15);
+}
+
+.info-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.info-icon {
+  font-size: 3.4rem;
+  color: #6f4e37; /* coffee color */
+  margin-top: 3px;
+}
+
+.info-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-label {
+  font-size: 0.95rem;
+  color: #4b3621;
+}
+
+.info-value {
+  font-size: 1.05rem;
+  color: #2f1b0f;
+  font-weight: 600;
+}
+
+.hr-note {
+  border: none;
+  height: 1px;
+  background-color: #4b3621; /* dark coffee color */
+  opacity: 0.5;
+  margin: 14px 0;
+}
+.source-section {
+  padding: 15px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.source-section:last-child {
+  border-bottom: none;
+}
+
+.source-label {
+  color: #495057;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.source-badges {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.badge-sauce {
+  color: #2f1b0f;
+  font-size: 1rem;
+  padding: 6px 12px;
+}
+
+.badge-filling {
+  color: #2f1b0f;
+  font-size: 1rem;
+  padding: 6px 12px;
+}
+
+@media (max-width: 768px) {
+  .source-badges {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
+
+
+.empty-state {
+  text-align: center;
+  color: #aaa;
+  font-size: 14px;
+  padding: 20px 0;
+  font-style: italic;
+}

@@ -1,0 +1,99 @@
+<!-- Categories -->
+<div class="category-wrapper mb-4">
+ <button
+  *ngFor="let cat of categories"
+  class="btn category-btn"
+  [class.active]="(selected$ | async) === cat"
+  (click)="selectCategory(cat)">
+
+  {{ categoryLabels[cat] }}
+
+</button>
+</div>
+
+<!-- Data -->
+<div *ngIf="data$ | async as data; else loading" class="container">
+
+  <h2 class="text-center mb-4">
+  {{ categoryLabels[(selected$ | async) || ''] }}
+</h2>
+
+  <div class="row g-4">
+
+    <!-- Sauces -->
+    <div class="col-12 col-md-4">
+     <div class="card custom-card">
+  <h5>Sauces</h5>
+
+  <div class="card-content">
+    <ng-container *ngIf="data?.sauce; else noData">
+      <ul class="clean-list">
+        <li *ngFor="let item of formatList(data?.sauce)">
+          {{ item }}
+        </li>
+      </ul>
+    </ng-container>
+
+    <ng-template #noData>
+      <div class="empty-wrapper">
+        <p class="empty-text">N/A</p>
+      </div>
+    </ng-template>
+  </div>
+</div>
+    </div>
+
+    <!-- Fillings -->
+    <div class="col-12 col-md-4">
+     <div class="card custom-card">
+  <h5>Fillings</h5>
+
+  <div class="card-content">
+    <ng-container *ngIf="data?.fillings; else noData">
+      <ul class="clean-list">
+        <li *ngFor="let item of formatList(data?.fillings)">
+          {{ item }}
+        </li>
+      </ul>
+    </ng-container>
+
+    <ng-template #noData>
+      <div class="empty-wrapper">
+        <p class="empty-text">N/A</p>
+      </div>
+    </ng-template>
+  </div>
+</div>
+    </div>
+
+    <!-- Method -->
+    <div class="col-12 col-md-4">
+    <div class="card custom-card">
+  <h5>Method</h5>
+
+  <div class="card-content">
+    <ng-container *ngIf="data?.method; else noData">
+      <ul class="clean-list">
+        <li *ngFor="let item of formatList(data?.method)">
+          {{ item }}
+        </li>
+      </ul>
+    </ng-container>
+
+    <ng-template #noData>
+      <div class="empty-wrapper">
+        <p class="empty-text">N/A</p>
+      </div>
+    </ng-template>
+  </div>
+</div>
+    </div>
+
+  </div>
+</div>
+
+<ng-template #loading>
+  <div class="text-center mt-5">
+    <div class="spinner-border"></div>
+  </div>
+</ng-template>

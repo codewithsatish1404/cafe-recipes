@@ -1,0 +1,275 @@
+/* =========================
+   GLOBAL THEME
+========================= */
+
+.cafe-recipe-list-page {
+  background: linear-gradient(135deg, #fdf8f2, #f5efe6);
+  min-height: 100vh;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* =========================
+   GLASS SEARCH BAR
+========================= */
+
+.cafe-search-wrapper {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 16px;
+  padding: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+.cafe-search-input {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 1.1rem;
+  padding: 12px 16px;
+  border-radius: 12px;
+  color: #3b2f2f;
+}
+
+.cafe-search-input::placeholder {
+  color: #8b6f5a;
+}
+
+.cafe-search-input:focus {
+  box-shadow: none;
+}
+
+.cafe-search-spinner {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #8b5e3c;
+}
+
+/* =========================
+   GLASS RECIPE CARD
+========================= */
+
+.cafe-recipe-card {
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  transition: all 0.35s ease;
+  position: relative;
+}
+
+.cafe-recipe-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+/* =========================
+   IMAGE STYLING
+========================= */
+
+.recipe-image-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.recipe-img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.cafe-recipe-card:hover .recipe-img {
+  transform: scale(1.1);
+}
+
+/* Badge */
+.recipe-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: rgba(139, 94, 60, 0.9);
+  color: #fff;
+  padding: 5px 10px;
+  font-size: 12px;
+  border-radius: 8px;
+  backdrop-filter: blur(6px);
+}
+
+/* =========================
+   CONTENT
+========================= */
+
+.recipe-content {
+  padding: 16px;
+}
+
+.recipe-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #3b2f2f;
+  margin-bottom: 8px;
+}
+
+.recipe-description {
+  font-size: 0.9rem;
+  color: #6b5b4f;
+  height: 40px;
+  overflow: hidden;
+}
+
+/* Footer */
+.recipe-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12px;
+  font-weight: 500;
+  color: #5a4635;
+}
+
+.recipe-price {
+  font-size: 1.1rem;
+  color: #8b5e3c;
+}
+
+.recipe-time {
+  font-size: 0.85rem;
+}
+
+/* =========================
+   BUTTON
+========================= */
+
+.cafe-add-btn {
+  margin-top: 12px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #8b5e3c, #a47148);
+  color: white;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.cafe-add-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(139, 94, 60, 0.4);
+}
+
+/* =========================
+   SKELETON LOADER
+========================= */
+
+.skeleton-card {
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.shimmer {
+  position: relative;
+  overflow: hidden;
+  background: #e0d6cc;
+}
+
+.shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -150px;
+  width: 150px;
+  height: 100%;
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(255, 255, 255, 0.5),
+      transparent);
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  100% {
+    left: 100%;
+  }
+}
+
+/* =========================
+   EMPTY STATE
+========================= */
+
+.cafe-empty-state {
+  padding: 60px 20px;
+}
+
+.empty-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #3b2f2f;
+}
+
+.empty-subtitle {
+  color: #7a6656;
+  margin-top: 10px;
+}
+
+.cafe-empty-btn {
+  margin-top: 20px;
+  border-radius: 10px;
+  border-color: #8b5e3c;
+  color: #8b5e3c;
+}
+
+.cafe-empty-btn:hover {
+  background: #8b5e3c;
+  color: #fff;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+  .recipe-img {
+    height: 180px;
+  }
+
+  .cafe-search-wrapper {
+    width: 100% !important;
+  }
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.modal-box {
+  width: 95%;
+  max-width: 700px;
+  background: #fffaf5;
+  border-radius: 12px;
+  padding: 20px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.product-card {
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.product-card.deleting {
+  opacity: 0;
+  transform: scale(0.95);
+}

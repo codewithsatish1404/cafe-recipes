@@ -1,0 +1,247 @@
+<div class="cafe-recipe-list-page">
+
+  <!-- 🔍 SEARCH + ADD -->
+  <section class="cafe-filters-section py-5">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <!-- Search -->
+        <div class="cafe-search-wrapper w-75 position-relative flex-grow-1 me-3">
+          <input #searchInput class="cafe-search-input form-control form-control-lg shadow-lg"
+            placeholder="Search our cafe menu..." [value]="search()" (input)="onSearch(searchInput.value)" />
+          <!-- Spinner -->
+          <span *ngIf="loading && search()" class="cafe-search-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+          </span>
+        </div>
+
+        <!-- Add Recipe (icon + text) -->
+        <button class="btn btn-success" (click)="openAddForm()">
+          <i class="fas fa-plus me-1"></i> Add Recipe
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ✅ MODAL FORM -->
+  <section>
+    <div class="modal-overlay" *ngIf="showForm">
+      <div class="modal-box">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h4>{{ isEditMode ? 'Edit Recipe' : 'Add Recipe' }}</h4>
+          <button class="btn btn-sm btn-danger" (click)="closeForm()">✖</button>
+        </div>
+
+        <form [formGroup]="recipeForm" (ngSubmit)="isEditMode ? onUpdate() : onSubmit()">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label>Name</label>
+              <input class="form-control" formControlName="name" />
+            </div>
+
+            <div class="col-md-6">
+              <label>Image</label>
+              <input type="file" class="form-control" (change)="onFileSelected($event)" accept="image/*" />
+              <!-- ✅ Preview (new OR existing image) -->
+              <img *ngIf="imagePreview || imageBase64" [src]="imagePreview || imageBase64" width="120"
+                class="mt-2 rounded shadow-sm" />
+            </div>
+
+            <div class="col-md-6">
+              <label>Category</label>
+              <input class="form-control" formControlName="category" />
+            </div>
+
+            <div class="col-md-6">
+              <label>Regular Price</label>
+              <input type="number" class="form-control" formControlName="regular" />
+            </div>
+
+            <div class="col-12">
+              <label>Description</label>
+              <textarea class="form-control" formControlName="description"></textarea>
+            </div>
+
+            <div class="col-md-6">
+              <label>Prep Time</label>
+              <input class="form-control" formControlName="prepTime" />
+            </div>
+
+            <div class="col-md-6">
+              <label>Cook Time</label>
+              <input class="form-control" formControlName="cookTime" />
+            </div>
+
+            <div class="col-md-6">
+              <label>Serving</label>
+              <input type="number" class="form-control" formControlName="serving" />
+            </div>
+
+            <div class="col-12">
+              <label>Ingredients (comma separated)</label>
+              <input class="form-control" formControlName="ingredients" />
+            </div>
+
+            <div class="col-md-6">
+              <label>Sauce Source</label>
+              <input class="form-control" formControlName="sauce" />
+            </div>
+
+            <div class="col-md-6">
+              <label>Filling Source</label>
+              <input class="form-control" formControlName="filling" />
+            </div>
+
+            <div class="col-12">
+              <label>Preparation Steps (comma separated)</label>
+              <textarea class="form-control" formControlName="preparation"></textarea>
+            </div>
+
+            <div class="col-12">
+              <label>Note</label>
+              <input class="form-control" formControlName="note" />
+            </div>
+
+            <div class="col-md-6">
+              <label>Vegetarian</label>
+              <select class="form-control" formControlName="isVeg">
+                <option [value]="true">Yes</option>
+                <option [value]="false">No</option>
+              </select>
+            </div>
+
+            <div class="col-12 text-end">
+              <button class="btn btn-primary" type="submit" [disabled]="loading">
+                {{ isEditMode ? 'Updating...' : 'Saving...' }}
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+
+
+  <!-- 🍽️ RECIPES -->
+  <main class="cafe-recipes-main">
+    <div class="container-fluid">
+
+      <!-- Skeleton Loader -->
+      <ng-container *ngIf="loading && recipeCount === 0">
+        <div class="row g-4">
+
+          <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6" *ngFor="let item of [1,2,3,4,5,6,7,8]">
+
+            <div class="cafe-recipe-card skeleton-card">
+              <!-- Image placeholder with icon overlay -->
+              <div class="recipe-image-container skeleton-img shimmer position-relative">
+                <i class="fa fa-mug-hot fa-3x text-muted position-absolute top-50 start-50 translate-middle"></i>
+              </div>
+
+              <div class="recipe-content p-3">
+                <!-- Title line -->
+                <div class="skeleton-line shimmer w-75 mb-2"></div>
+
+                <!-- Short description / category lines -->
+                <div class="skeleton-line shimmer w-100 mb-1"></div>
+                <div class="skeleton-line shimmer w-90 mb-2"></div>
+
+                <!-- Icons + text lines footer -->
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                  <div class="d-flex align-items-center">
+                    <i class="fa fa-clock me-2 text-muted"></i>
+                    <div class="skeleton-line shimmer w-25"></div>
+                  </div>
+
+                  <div class="d-flex align-items-center">
+                    <i class="fa fa-utensils me-2 text-muted"></i>
+                    <div class="skeleton-line shimmer w-25"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+
+        </div>
+      </ng-container>
+
+      <!-- Recipes Grid -->
+      <div class="row g-4 g-md-5 recipe-grid">
+
+        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 product-card"
+          *ngFor="let recipe of recipes$ | async; trackBy: trackByFn; let i = index"
+          [class.deleting]="deletingId === recipe._id" [style.animationDelay.ms]="i * 60">
+
+          <div class="cafe-recipe-card h-100">
+
+            <!-- Image -->
+            <div class="recipe-image-container">
+              <img [src]="recipe.image" class="recipe-img lazy-img" [alt]="recipe.name" loading="lazy" decoding="async"
+                (load)="onImageLoad($event)" />
+
+              <div class="recipe-badge">
+                {{ recipe.category }}
+              </div>
+            </div>
+
+            <!-- Content -->
+            <div class="recipe-content">
+
+              <h3 class="recipe-title">{{ recipe.name }}</h3>
+
+              <p class="recipe-description">
+                {{ recipe.description }}
+              </p>
+
+              <!-- Footer -->
+              <div class="recipe-footer">
+                <div class="recipe-price">
+                  ₹{{ recipe.price.regular }}
+                </div>
+
+                <div class="recipe-time">
+                  <i class="fas fa-bowl-rice me-1"></i>
+                  {{ recipe.prepTime }}
+                </div>
+              </div>
+              <hr>
+              <div class="d-flex justify-content-between mt-3">
+
+                <!-- VIEW -->
+                <i class="fas fa-eye text-primary pointer" (click)="viewRecipe(recipe)"></i>
+
+                <div>
+                  <!-- DELETE -->
+                  <i class="fas fa-trash-alt text-danger pointer me-2" (click)="deleteRecipe(recipe)"
+                    [class.disabled]="deletingId === recipe._id"
+                    [style.pointer-events]="deletingId === recipe._id ? 'none' : 'auto'"></i>
+
+                  <!-- EDIT -->
+                  <i class="fas fa-edit text-warning pointer" (click)="editRecipe(recipe)"></i>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Empty State -->
+        <div class="col-12 cafe-empty-state text-center" *ngIf="recipeCount === 0 && !loading && !search()">
+
+          <h3 class="empty-title">No recipes found</h3>
+          <p class="empty-subtitle">
+            Try searching or selecting a category
+          </p>
+
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+</div>

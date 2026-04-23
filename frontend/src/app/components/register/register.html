@@ -1,0 +1,59 @@
+<div class="auth-container">
+  <div class="auth-card">
+
+    <h2>📝 Create Account</h2>
+
+    <form #registerForm="ngForm" (ngSubmit)="register(registerForm)">
+
+      <!-- Name -->
+      <div class="form-group">
+        <input 
+          type="text" 
+          name="name" 
+          [(ngModel)]="name" 
+          required 
+          #nameRef="ngModel" autocomplete="off" />
+        <label>Name</label>
+      </div>
+
+      <!-- Email -->
+      <div class="form-group">
+        <input 
+          type="email" 
+          name="email" 
+          [(ngModel)]="email" 
+          required 
+          #emailRef="ngModel" autocomplete="off" />
+        <label>Email</label>
+      </div>
+
+      <!-- Password -->
+      <div class="form-group">
+        <input 
+          type="password" 
+          name="password" 
+          [(ngModel)]="password" 
+          required 
+          minlength="4"
+          #passRef="ngModel" autocomplete="off" />
+        <label>Password</label>
+      </div>
+
+      <!-- Button -->
+      <button 
+        type="submit" 
+        class="btn-auth"
+        [disabled]="registerForm.invalid">
+        Register
+      </button>
+
+    </form>
+
+    <!-- Switch -->
+    <p class="switch">
+      Already have an account?
+      <a routerLink="/login">Login</a>
+    </p>
+
+  </div>
+</div>

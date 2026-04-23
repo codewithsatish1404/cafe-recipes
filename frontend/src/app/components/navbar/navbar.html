@@ -1,0 +1,77 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm fixed-top">
+  <div class="container-fluid">
+
+    <!-- Brand -->
+    <a class="navbar-brand fw-bold fs-4 ms-3" routerLink="/">
+      ☕ Brew & Bite
+    </a>
+
+    <!-- Toggler -->
+    <button
+      class="navbar-toggler border-0"
+      type="button"
+      (click)="toggleMenu()"
+      [attr.aria-expanded]="isMenuOpen">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Collapsible -->
+    <div class="navbar-collapse" [class.show]="isMenuOpen">
+
+      <!-- Close button (mobile) -->
+      <div class="d-lg-none text-end px-3 pt-2">
+        <button class="btn-close" (click)="closeMenu()"></button>
+      </div>
+
+    <ng-container *ngIf="auth.user$ | async as user; else guest">
+
+  <!-- NAV LINKS (always visible) -->
+  <div class="navbar-nav mx-auto text-center">
+
+    <a class="nav-link" routerLink="/home">🏠 Home</a>
+    <a class="nav-link" routerLink="/recipe-list">🍽️ Menu</a>
+    <a class="nav-link" routerLink="/setup">🔧 Setup</a>
+
+    <!-- admin -->
+    <a *ngIf="user?.role === 'admin'" class="nav-link" routerLink="/admin">
+      👑 Admin
+    </a>
+
+  </div>
+
+  <!-- logged in -->
+  <div class="ms-auto">
+    👤 {{ user.name }}
+    <button (click)="logout()" class="btn btn-danger ms-3">Logout</button>
+  </div>
+
+</ng-container>
+
+<!-- guest -->
+<ng-template #guest>
+  <div class="navbar-nav mx-auto text-center">
+    <a class="nav-link" routerLink="/home">🏠 Home</a>
+    <a class="nav-link" routerLink="/recipe-list">🍽️ Menu</a>
+    <a class="nav-link" routerLink="/setup">🔧 Setup</a>
+  </div>
+
+ <div class="ms-auto d-flex gap-2">
+
+  <a routerLink="/login"
+     class="btn btn-outline-dark btn-sm"
+     (click)="closeMenu()">
+    Login
+  </a>
+
+  <a routerLink="/register"
+     class="btn btn-dark btn-sm"
+     (click)="closeMenu()">
+    Register
+  </a>
+
+</div>
+</ng-template>
+
+    </div>
+  </div>
+</nav>

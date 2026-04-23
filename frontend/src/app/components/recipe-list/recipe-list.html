@@ -1,0 +1,160 @@
+<div class="cafe-recipe-list-page">
+  <section class="cafe-filters-section py-5">
+    <div class="container">
+      <div class="row g-4 align-items-end">
+        <div class="col-12 d-flex justify-content-center">
+          <div class="cafe-search-wrapper w-75">
+            <input #searchInput class="cafe-search-input form-control form-control-lg shadow-lg"
+              placeholder="Search our cafe menu..." [value]="search()" (input)="onSearch(searchInput.value)">
+            <span *ngIf="loading" class="cafe-search-spinner">
+              <i class="fas fa-spinner fa-spin"></i>
+            </span>
+            <div class="cafe-search-icon">
+              <!-- <i class="fas fa-search"></i> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cafe-categories-compact">
+    <div class="container-fluid">
+      <div class="categories-container-compact">
+        <div class="categories-grid-compact">
+
+          <!-- All Categories Chip -->
+
+          <button class="cafe-category-chip-compact active-chip" [ngClass]="{'active-chip': selectedCategory() === ''}"
+            (click)="onCategorySelect('')">
+            <span class="chip-icon-compact">🍽️</span>
+            <span class="chip-label-compact">All</span>
+          </button>
+
+          <!-- Dynamic Category Chips -->
+          <button *ngFor="let cat of categories; trackBy: trackByIndex" class="cafe-category-chip-compact"
+            [ngClass]="{'active-chip': selectedCategory() === cat}" (click)="onCategorySelect(cat)">
+            <span class="chip-icon-compact" ></span>
+            <span class="chip-label-compact">
+              {{ cat.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) }}
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cafe Recipes Main Grid -->
+  <main class="cafe-recipes-main">
+    <div class="container">
+      <ng-container *ngIf="loading && recipeCount === 0">
+        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6" *ngFor="let item of [1,2,3,4,5,6,7,8]">
+
+          <div class="cafe-recipe-card skeleton-card">
+            <div class="recipe-image-container shimmer"></div>
+
+            <div class="recipe-content">
+              <div class="skeleton-line shimmer w-75"></div>
+              <div class="skeleton-line shimmer w-50"></div>
+              <div class="skeleton-line shimmer w-25"></div>
+            </div>
+          </div>
+
+        </div>
+      </ng-container>
+      <div class="row g-4 g-md-5 recipe-grid" infiniteScroll [infiniteScrollDistance]="1" [infiniteScrollThrottle]="300"
+        [scrollWindow]="true" (scrolled)="loadRecipes()">
+
+        <!-- Cafe Recipe Cards - 4 Per Row -->
+        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 product-card"
+          *ngFor="let recipe of recipes$ | async; trackBy: trackByFn; let i = index" [style.animationDelay.ms]="i * 60">
+
+          <div class="cafe-recipe-card h-100">
+
+            <!-- Recipe Image -->
+            <div class="recipe-image-container">
+              <img [src]="recipe.image" class="recipe-img lazy-img" [alt]="recipe.name" loading="lazy"
+                (load)="onImageLoad($event)">
+
+
+
+              <div class="recipe-badge">
+                {{ recipe.category }}
+              </div>
+            </div>
+
+            <!-- Content -->
+            <div class="recipe-content">
+              <h3 class="recipe-title">{{ recipe.name }}</h3>
+              <p class="recipe-description">{{ recipe.description }}</p>
+
+              <!-- Footer -->
+             <div class="recipe-footer" [ngClass]="{'pizza-layout': recipe.category === 'pizza'}">
+
+  <!-- PRICE -->
+  <div class="recipe-price"  [ngClass]="{'pizza-price': recipe.category === 'pizza'}">
+    
+    <!-- Pizza -->
+    <ng-container *ngIf="recipe.category === 'pizza'; else normalPrice">
+       <span class="size-icon small">S</span> ₹{{ recipe.price.small }}
+      <span class="size-icon medium">M</span> ₹{{ recipe.price.regular }}
+      <span class="size-icon large">L</span> ₹{{ recipe.price.large }}
+    </ng-container>
+
+    <!-- Normal -->
+    <ng-template #normalPrice>
+      ₹{{ recipe.price.regular }}
+    </ng-template>
+
+  </div>
+
+  <!-- PREP TIME -->
+  <div class="recipe-time" [ngClass]="{'pizza-time': recipe.category === 'pizza'}">
+    <i class="fas fa-bowl-rice me-1"></i>{{ recipe.prepTime }}
+  </div>
+
+</div>
+
+              <div class="text-lg-center mt-3">
+                <button type="button" class="cafe-add-btn" (click)="viewRecipe(recipe)">
+                  View Details
+                </button>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Cafe Empty State -->
+        <div class="col-12 cafe-empty-state" *ngIf="recipeCount === 0 && !loading">
+          <h3 class="empty-title">No recipes found</h3>
+          <p class="empty-subtitle">Try adjusting your search or filters</p>
+          <button class="cafe-empty-btn btn btn-outline-primary" (click)="clearFilters()">
+            Clear All Filters
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Cafe Loading Section -->
+  <footer class="cafe-loading-section text-center py-6" *ngIf="loading">
+    <div class="cafe-spinner spinner-border spinner-border-xl text-gold mb-4" role="status">
+      <span class="visually-hidden">Loading more recipes...</span>
+    </div>
+    <h2 class="loading-title text-gold mb-3">Brewing your menu...</h2>
+    <p class="loading-subtitle text-muted fw-semibold">Loading next delicious recipes</p>
+  </footer>
+<hr>
+  <!-- Cafe End Section -->
+  <footer class="cafe-end-section text-center py-6 mt-5" *ngIf="!loading && !hasMore && recipeCount > 0">
+    <div class="end-icon mb-4">
+      <i class="fas fa-coffee fa-3x text-gold"></i>
+    </div>
+    <h5 class="end-title text-gold mb-3">Menu Fully Served!</h5>
+    <div class="end-count h2 fw-bold text-dark opacity-90">
+      {{ recipeCount }} recipes ready to enjoy
+    </div>
+  </footer>
+</div>

@@ -1,0 +1,33 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
+$cafe-gold: #291C0E;
+$cafe-gold-dark: #6E473B;
+$cafe-cream: #F5F2E9;
+$cafe-beige: #E8DAB2;
+$cafe-brown: #5C4033;
+$cafe-dark: #2D1B14;
+$cafe-light: #F8F4E6;
+$cafe-shadow: rgba(92, 64, 51, 0.15);
+
+
+:host {
+  font-family: 'Playfair Display', serif;
+
+  --cafe-gold: #{$cafe-gold};
+  --cafe-gold-dark: #{$cafe-gold-dark};
+  --cafe-cream: #{$cafe-cream};
+  --cafe-beige: #{$cafe-beige};
+  --cafe-brown: #{$cafe-brown};
+  --cafe-dark: #{$cafe-dark};
+  --cafe-light: #{$cafe-light};
+  --cafe-shadow: #{$cafe-shadow};
+  // --cafe-glow: #{$cafe-glow};
+
+}
+
+html,body{
+    font-family: 'Playfair Display', serif;
+
+}
+

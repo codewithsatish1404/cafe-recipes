@@ -1,0 +1,24 @@
+.denied-container {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #fdfcfb, #e2d1c3);
+}
+
+.denied-card {
+  text-align: center;
+  background: white;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+  }
+
+  p {
+    color: #666;
+  }
+}

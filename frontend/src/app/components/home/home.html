@@ -1,0 +1,185 @@
+
+
+<section class="carousel py-2">
+  <div class="container-fluid px-lg-4">
+    <div id="coffeeCarousel"
+     class="carousel slide carousel-fade"
+     data-bs-ride="carousel"
+     data-bs-interval="3500"
+     data-bs-pause="hover"
+     data-bs-wrap="true">
+
+  <!-- Indicators -->
+  <div class="carousel-indicators">
+    <button *ngFor="let item of carouselItems; trackBy: trackByIndex; let i = index"
+            type="button"
+            data-bs-target="#coffeeCarousel"
+            [attr.data-bs-slide-to]="i"
+            [class.active]="i === 0">
+    </button>
+  </div>
+
+  <!-- Slides -->
+  <div class="carousel-inner">
+
+    <div *ngFor="let item of carouselItems; let i = index"
+         class="carousel-item"
+         [class.active]="i === 0">
+
+      <div class="row g-0 h-100 align-items-center min-vh-70"
+           [class.flex-row-reverse]="item.reverse">
+
+        <!-- Image -->
+    <div class="col-lg-6 p-4 p-lg-0 mobile-image-full">
+          <img [src]="item.image"
+               class="img-fluid rounded-4 shadow-lg w-100"
+               
+               [alt]="item.title">
+        </div>
+
+        <!-- Content -->
+        <div class="col-lg-6 p-5">
+          <span class="badge fs-6 px-4 py-2 mb-4 fw-semibold shadow-sm"
+                [ngClass]="item.badgeClass">
+            {{ item.badge }}
+          </span>
+
+          <h3 class="display-4 fw-bold text-dark mb-4 lh-1">
+            {{ item.title }}
+          </h3>
+
+          <p class="lead lh-lg text-muted mb-5">
+            {{ item.desc }}
+          </p>
+
+          <div class="d-flex gap-3 flex-column flex-md-row">
+            <a [routerLink]="item.orderLink"
+               class="btn btn-lg px-5 py-3 fw-semibold shadow-lg"
+               [ngClass]="item.badgeClass">
+              Order Now
+            </a>
+
+            <a [routerLink]="item.recipeLink"
+               class="btn btn-outline-dark btn-lg px-5 py-3 fw-semibold">
+              Get Recipe
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Controls -->
+  <button class="carousel-control-prev"
+          type="button"
+          data-bs-target="#coffeeCarousel"
+          data-bs-slide="prev">
+    <span class="carousel-control-prev-icon bg-dark bg-opacity-50 rounded-circle"></span>
+  </button>
+
+  <button class="carousel-control-next"
+          type="button"
+          data-bs-target="#coffeeCarousel"
+          data-bs-slide="next">
+    <span class="carousel-control-next-icon bg-dark bg-opacity-50 rounded-circle"></span>
+  </button>
+
+</div>
+  </div>
+</section>
+
+
+
+<section class="cat-section text-center">
+  <h2 class="section-title mb-5">Explore Categories</h2>
+
+  <div class="row g-4 justify-content-center">
+
+    <div class="col-lg-3 col-md-4 col-6"
+         *ngFor="let cat of categories; trackBy: trackByIndex">
+
+      <div class="category-card">
+
+        <!-- IMAGE (FULL CLEAR) -->
+        <img [src]="cat.image" class="bg-img">
+
+        <!-- GLASS PANEL (ONLY BOTTOM AREA) -->
+        <div class="glass-panel">
+          <h5>{{ cat.title }}</h5>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- BESTSELLERS -->
+<section class="section bestsellers-section p-3">
+  <h2 class="section-title text-center mb-5">🔥 Best Sellers</h2>
+
+  <div class="row g-4">
+    <div
+      class="col-lg-2 col-md-6"
+      *ngFor="let item of bestsellers; trackBy: trackByIndex"
+    >
+      <div class="product-card">
+        <div class="img-wrapper">
+          <img [src]="item.image" alt="{{ item.title }}">
+        </div>
+
+        <div class="product-content">
+          <div class="glass-title">
+            <h5>{{ item.title }}</h5>
+          </div>
+          <p>{{ item.desc }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="why-choose-us-rows">
+    <h2 class="section-title text-center mb-5">Why Choose Us</h2>
+
+  <div
+    *ngFor="let item of whyChooseUs; let index = index"
+    class="why-row"
+    [class.image-left]="index % 2 === 0"
+    [class.image-right]="index % 2 === 1"
+  >
+    <div class="why-image">
+      <img [src]="item.image" [alt]="item.title" />
+    </div>
+    <div class="why-content">
+      <h3 class="why-title">{{ item.title }}</h3>
+      <p class="why-description">{{ item.desc }}</p>
+    </div>
+  </div>
+</section>
+
+<section class="story-section">
+  <div class="story-bg"></div>
+  <div class="story-content">
+ 
+  
+  <h2 class="story-title">Our Story</h2>
+  
+  <p class="story-subtitle">
+    From humble beginnings to your favorite cup
+  </p>
+  
+  <p class="story-desc">
+    Born in the misty hills of Coorg, every bean we roast carries whispers of tradition and innovation. 
+    We handcraft each brew with passion, turning moments into memories—one perfect sip at a time.
+  </p>
+  
+  <a href="/story" class="story-btn">
+    Discover More
+  </a>
+</div>
+  <div class="story-bg-2"></div>
+</section>

@@ -1,0 +1,205 @@
+
+<div class="cafe-recipe-details-page container-fluid py-3">
+<div class="back-menu mb-4">
+  <a routerLink="/recipe-list"
+     class="btn btn-outline-secondary">
+    ← Back to Menu
+  </a>
+</div>
+  <!-- Header with Title & Category -->
+  <div class="row align-items-center mb-4">
+    <div class="col-lg-8 d-flex justify-content-between align-items-center">
+      <h1 class="recipe-title">{{ recipe?.name || 'Loading Recipe...' }}</h1>
+      <!-- Price Badge Added -->
+      <div class="price-badge ms-5">~  ₹{{ recipe?.price?.regular }}</div>
+<div class="veg-badge"
+     [ngClass]="recipe?.isVeg ? 'veg' : 'non-veg'">
+  {{ recipe?.isVeg ? '🌿 Veg' : '🍗 Non-Veg' }}
+</div>
+    </div>
+    <div class="col-lg-4 text-lg-end">
+      <div class="recipe-category-card">
+        {{ recipe?.category | titlecase }}
+      </div>
+    </div>
+  </div>
+ <!-- Description -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="recipe-description">
+        <h6>{{ recipe?.description }}</h6>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <!-- Image + Info Cards -->
+  <div class="row g-4 mb-4">
+    <div class="col-lg-6">
+      <div class="recipe-image-card">
+        <img
+          [src]="recipe?.image || '/assets/placeholder-coffee.jpg'"
+          [alt]="recipe?.name || 'Recipe image'"
+          class="recipe-banner-img"
+          loading="lazy">
+        <!-- Veg Badge -->
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="recipe-info-card">
+        <div class="info-row">
+          <i class="fas fa-bowl-rice info-icon"></i>
+          <div class="info-text">
+            <span class="info-label">Prep Time</span>
+            <strong class="info-value">{{ recipe?.prepTime }}</strong>
+          </div>
+        </div>
+
+        <hr class="info-divider">
+
+        <div class="info-row">
+          <i class="fas fa-clock info-icon"></i>
+          <div class="info-text">
+            <span class="info-label">Cook Time</span>
+            <strong class="info-value">{{ recipe?.cookTime }}</strong>
+          </div>
+        </div>
+
+        <hr class="info-divider">
+
+        <div class="info-row">
+          <i class="fas fa-utensils info-icon"></i>
+          <div class="info-text">
+            <span class="info-label">Servings</span>
+            <strong class="info-value">{{ recipe?.serving }}</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+ <hr>
+
+  <!-- Ingredients + Preparation -->
+  <div class="row g-4 mb-4">
+    <div class="col-lg-6">
+      <div class="recipe-card">
+        <h3 class="section-title">
+          <i class="fas fa-list me-2"></i> Ingredients
+        </h3>
+        <ul class="ingredients-list">
+          <li *ngFor="let item of recipe?.ingredients; trackBy: trackByIndex">
+            {{ item }}
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="recipe-card">
+        <h3 class="section-title">
+          <i class="fas fa-utensils me-2"></i> Preparation
+        </h3>
+        <ol class="steps-list">
+          <li *ngFor="let step of recipe?.preparation; trackBy: trackByIndex">
+            {{ step }}
+          </li>
+        </ol>
+      </div>
+    </div>
+    <!-- Sandwich Assemble Steps -->
+<hr>
+    <div class="row mb-4" *ngIf="showAssembleSection(recipe)">
+
+  <!-- 🔹 Assemble Steps -->
+  <div class="col-lg-8 col-md-12">
+    <div class="recipe-card">
+
+      <h3 class="section-title">
+        <i class="fas fa-layer-group me-2"></i> Assemble Steps
+      </h3>
+
+      <ul class="steps-list">
+        <li *ngFor="let step of getAssembleSteps(recipe); trackBy: trackByIndex">
+          {{ step }}
+        </li>
+      </ul>
+
+      <hr>
+
+      <div class="assemble-time mt-3">
+        <small class="fst-italic">{{ assembleTime }}</small>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 🔹 Sauce & Filling -->
+  <div class="col-lg-4 col-md-12">
+  <div class="recipe-card">
+
+    <h3 class="section-title">
+      <i class="fas fa-fire-alt me-2"></i> Sauce & Filling
+    </h3>
+
+    <ng-container *ngIf="recipe?.sources?.sauce || recipe?.sources?.filling; else noSource">
+
+      <!-- Sauce -->
+      <div class="source-section mb-3" *ngIf="recipe?.sources?.sauce">
+        <h6 class="source-label">
+          <i class="fas fa-utensils me-1"></i> Sauce:
+        </h6>
+
+        <span class="badge badge-sauce rounded-pill">
+          {{ recipe.sources.sauce }}
+        </span>
+      </div>
+
+      <!-- Filling -->
+      <div class="source-section" *ngIf="recipe?.sources?.filling">
+        <h6 class="source-label">
+          <i class="fas fa-drumstick-bite me-1"></i> Filling:
+        </h6>
+
+        <span class="badge badge-filling rounded-pill">
+          {{ recipe.sources.filling }}
+        </span>
+      </div>
+
+    </ng-container>
+
+    <!-- ✅ Fallback -->
+    <ng-template #noSource>
+      <div class="empty-state">
+        N/A
+      </div>
+    </ng-template>
+
+  </div>
+</div>
+
+</div>
+
+  </div>
+
+  <!-- Notes Section -->
+  <hr>
+  <div class="row">
+    <div class="col-12">
+      <div class="recipe-card note-card">
+        <h3 class="section-title">
+          <i class="fas fa-lightbulb me-2"></i>Notes
+        </h3>
+        <p class="note-text">{{ recipe?.note }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Back Button -->
+  <div class="row mt-4">
+    <div class="col-12">
+      <a routerLink="/recipe-list" class="btn-back">
+        ← Back to Menu
+      </a>
+    </div>
+  </div>
+</div>
