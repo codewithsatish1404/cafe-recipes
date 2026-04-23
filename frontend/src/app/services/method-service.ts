@@ -28,7 +28,9 @@ export class MethodService {
   loadAllMethods(): Observable<MethodsByCategory> {
     console.log('🔥 Service: Fetching from', this.apiUrl);
 
-    return this.http.get<MethodsByCategory>(this.apiUrl).pipe(
+    return this.http.get<MethodsByCategory>(this.apiUrl, {
+      withCredentials: true   // ✅ FIX
+    }).pipe(
       map(data => {
         console.log('✅ Service: API SUCCESS', data);
         this.methodsSubject.next(data);
@@ -36,14 +38,15 @@ export class MethodService {
       }),
       catchError((error) => {
         console.error('❌ Service: API ERROR', error);
-        console.error('Status:', error.status, 'Message:', error.message);
         return throwError(() => error);
       })
     );
   }
 
   getMethodByCategory(category: string): Observable<CategoryMethod> {
-    return this.http.get<CategoryMethod>(`${this.apiUrl}/${category}`).pipe(
+    return this.http.get<CategoryMethod>(`${this.apiUrl}/${category}`, {
+      withCredentials: true   // ✅ FIX
+    }).pipe(
       catchError((error) => {
         console.error('❌ Single category error:', category, error);
         return throwError(() => error);

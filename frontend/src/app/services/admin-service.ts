@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment.prod';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -21,26 +22,38 @@ export class AdminService {
       }
     });
 
-    return this.http.get(this.baseUrl, { params });
+    return this.http.get(this.baseUrl, {
+      params,
+      withCredentials: true   // ✅ FIX
+    });
   }
 
   // ---------------- GET BY ID ----------------
   getRecipeById(id: string): Observable<any> {
-    return this.http.get(`${this.baseUrl}/${id}`);
+    return this.http.get(`${this.baseUrl}/${id}`, {
+      withCredentials: true   // ✅ FIX
+    });
   }
 
   // ---------------- GET CATEGORIES ----------------
   getCategories(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/categories`);
+    return this.http.get(`${this.baseUrl}/categories`, {
+      withCredentials: true   // ✅ FIX
+    });
   }
 
   // ---------------- CREATE ----------------
   createRecipe(data: any): Observable<any> {
-    return this.http.post(this.baseUrl, data);
+    return this.http.post(this.baseUrl, data, {
+      withCredentials: true   // ✅ FIX
+    });
   }
 
-  // ---------------- (FIXED VERSION) GET RECIPES ----------------
+  // ---------------- GET RECIPES ----------------
   getRecipes(params: any = {}): Observable<any> {
-    return this.http.get(this.baseUrl, { params });
+    return this.http.get(this.baseUrl, {
+      params,
+      withCredentials: true   // ✅ FIX
+    });
   }
 }
