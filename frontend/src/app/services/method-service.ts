@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, map, Observable, catchError, throwError } from 'rxjs';
+import { environment } from '../../environments/environment.prod';
 
 export interface CategoryMethod {
   sauce?: string;
@@ -16,7 +17,9 @@ export interface MethodsByCategory {
   providedIn: 'root',
 })
 export class MethodService {
-  private apiUrl = 'http://localhost:3000/api/methods';
+
+  private apiUrl = environment.apiUrl + '/api/methods';
+
   private methodsSubject = new BehaviorSubject<MethodsByCategory>({});
   methods$ = this.methodsSubject.asObservable();
 
@@ -24,7 +27,7 @@ export class MethodService {
 
   loadAllMethods(): Observable<MethodsByCategory> {
     console.log('🔥 Service: Fetching from', this.apiUrl);
-    
+
     return this.http.get<MethodsByCategory>(this.apiUrl).pipe(
       map(data => {
         console.log('✅ Service: API SUCCESS', data);

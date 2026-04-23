@@ -1,14 +1,13 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-
+import { environment } from '../../environments/environment.prod';
 @Injectable({
   providedIn: 'root',
 })
 export class AdminService {
-  
-  private baseUrl = 'http://localhost:3000/api/recipes';
 
+  private baseUrl = environment.apiUrl + '/api/recipes';
 
   constructor(private http: HttpClient) {}
 
@@ -39,9 +38,9 @@ export class AdminService {
   createRecipe(data: any): Observable<any> {
     return this.http.post(this.baseUrl, data);
   }
-  getRecipes(params: any = {}) {
-  return this.http.get('http://localhost:3000/api/recipes', { params });
-}
 
-
+  // ---------------- (FIXED VERSION) GET RECIPES ----------------
+  getRecipes(params: any = {}): Observable<any> {
+    return this.http.get(this.baseUrl, { params });
+  }
 }

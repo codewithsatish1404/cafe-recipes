@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-
+import { environment } from '../../environments/environment.prod';
 export interface User {
   _id?: string;
   name: string;
@@ -14,7 +14,7 @@ export interface User {
 })
 export class AuthService {
 
-  private baseUrl = 'http://localhost:3000/api/auth';
+  private baseUrl = environment.apiUrl + '/api/auth';
 
   constructor(private http: HttpClient) {}
 
@@ -54,7 +54,7 @@ export class AuthService {
     return this.userSubject.value;
   }
 
-  // 🔹 Helpers (used in guards if needed)
+  // 🔹 Helpers
   isLoggedIn(): boolean {
     return !!this.userSubject.value;
   }
