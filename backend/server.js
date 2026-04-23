@@ -5,22 +5,22 @@ const app = require('./app');
 const PORT = process.env.PORT || 3000;
 
 // 🔹 Start Server
-const startServer = () => {
+const startServer = async () => {
   try {
     const server = app.listen(PORT, () => {
-      console.log(`🍽️ Cafe API running at http://localhost:${PORT}`);
+      console.log(`🍽️ Cafe API running on port ${PORT}`);
     });
 
     // Graceful shutdown handling
     const shutdown = () => {
       console.log('🛑 Shutting down server...');
+
       server.close(() => {
         console.log('✅ Server closed gracefully');
         process.exit(0);
       });
     };
 
-    // Handle termination signals
     process.on('SIGTERM', shutdown);
     process.on('SIGINT', shutdown);
 

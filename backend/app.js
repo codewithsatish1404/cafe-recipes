@@ -12,12 +12,12 @@ const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
 
-// 🔹 Connect DB
+// 🔹 Connect DB (kept same logic)
 connectDB();
 
-// 🔹 CORS
+// 🔹 CORS (safe for production + local)
 const corsOptions = {
-  origin: 'http://localhost:4200',
+  origin: process.env.CLIENT_URL || 'http://localhost:4200',
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization']
@@ -26,27 +26,30 @@ const corsOptions = {
 app.use(helmet());
 app.use(cors(corsOptions));
 app.use(morgan('dev'));
-app.use(cookieParser()); // ✅ important
+app.use(cookieParser());
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
-// 🔹 Health check
+// 🔹 Health check (important for Render monitoring)
 app.get('/health', (req, res) => {
-  res.json({ status: 'OK' });
+  res.json({ status: 'OK', message: 'Server is running' });
 });
 
 // 🔹 Routes
 app.use('/api', recipeRoutes);
 app.use('/api/methods', methodsRoutes);
-app.use('/api/auth', authRoutes); // ✅ auth added
+app.use('/api/auth', authRoutes);
 
 // 🔹 Error handler
 app.use(errorHandler);
 
-// 🔹 404
+// 🔹 404 handler
 app.use((req, res) => {
-  res.status(404).json({ success: false, message: 'Route not found' });
+  res.status(404).json({
+    success: false,
+    message: 'Route not found'
+  });
 });
 
 module.exports = app;
