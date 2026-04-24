@@ -4,18 +4,19 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment.prod';
 
 export interface User{
- id?:string;
- name:string;
- email:string;
- role:string;
+  _id?: string;   // changed from id -> _id to match backend
+  name: string;
+  email: string;
+  role: string;
 }
 
 @Injectable({
-providedIn:'root'
+  providedIn:'root'
 })
 export class AuthService {
 
-private baseUrl = environment.apiUrl + '/api/auth';
+private baseUrl =
+  environment.apiUrl + '/api/auth';
 
 private userSubject =
 new BehaviorSubject<User | null>(null);
@@ -30,8 +31,8 @@ constructor(
 // REGISTER
 register(data:any){
  return this.http.post(
-  `${this.baseUrl}/register`,
-  data
+   `${this.baseUrl}/register`,
+   data
  );
 }
 
@@ -39,18 +40,24 @@ register(data:any){
 // LOGIN
 login(data:any){
  return this.http.post<any>(
-  `${this.baseUrl}/login`,
-  data
+   `${this.baseUrl}/login`,
+   data
  ).pipe(
-   tap(res=>{
-     localStorage.setItem(
-       'token',
-       res.token
-     );
+   tap(res => {
 
-     this.userSubject.next(
-       res.user
-     );
+     if(res?.token){
+       localStorage.setItem(
+         'token',
+         res.token
+       );
+     }
+
+     if(res?.user){
+       this.userSubject.next(
+         res.user
+       );
+     }
+
    })
  );
 }
@@ -58,17 +65,27 @@ login(data:any){
 
 // LOGOUT
 logout(){
- localStorage.removeItem('token');
- this.userSubject.next(null);
 
- return this.http.post(
-   `${this.baseUrl}/logout`,
-   {}
- );
+localStorage.removeItem('token');
+
+this.userSubject.next(null);
+
+/*
+Optional backend hit.
+If you keep /logout route this calls it.
+If backend is stateless JWT only,
+you can remove the return and make
+logout() void.
+*/
+return this.http.post(
+ `${this.baseUrl}/logout`,
+ {}
+);
+
 }
 
 
-// GET CURRENT USER
+// CURRENT USER
 getMe():Observable<User>{
  return this.http.get<User>(
    `${this.baseUrl}/me`
@@ -76,8 +93,33 @@ getMe():Observable<User>{
 }
 
 
-// Helpers
-setUser(user:User | null){
+// SESSION RESTORE
+restoreSession(){
+
+const token =
+localStorage.getItem('token');
+
+if(!token) return;
+
+this.getMe().subscribe({
+ next:user=>{
+   this.setUser(user);
+ },
+ error:()=>{
+   localStorage.removeItem(
+    'token'
+   );
+   this.setUser(null);
+ }
+});
+
+}
+
+
+// HELPERS
+setUser(
+ user:User | null
+){
  this.userSubject.next(user);
 }
 
@@ -87,7 +129,7 @@ getUserValue(){
 
 getToken(){
  return localStorage.getItem(
-   'token'
+  'token'
  );
 }
 
@@ -96,7 +138,10 @@ isLoggedIn(){
 }
 
 isAdmin(){
- return this.userSubject.value?.role==='admin';
+ return (
+  this.userSubject.value?.role
+  === 'admin'
+ );
 }
 
 }
