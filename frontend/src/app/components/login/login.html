@@ -7,8 +7,15 @@
       name="email"
       required
       email
-      autocomplete="off">
+      autocomplete="off"
+      #emailCtrl="ngModel">
+
     <label>Email</label>
+
+    <!-- optional validation -->
+    <small class="text-danger" *ngIf="emailCtrl.invalid && emailCtrl.touched">
+      Enter valid email
+    </small>
   </div>
 
   <div class="form-group">
@@ -17,15 +24,25 @@
       [(ngModel)]="password"
       name="password"
       required
-      autocomplete="off">
+      minlength="4"
+      autocomplete="off"
+      #passCtrl="ngModel">
+
     <label>Password</label>
+
+    <!-- optional validation -->
+    <small class="text-danger" *ngIf="passCtrl.invalid && passCtrl.touched">
+      Password required
+    </small>
   </div>
 
   <button
     type="submit"
     class="btn-auth"
-    [disabled]="loading">
+    [disabled]="loading || loginForm.invalid">
+
     {{ loading ? 'Logging in...' : 'Login' }}
+
   </button>
 
 </form>
