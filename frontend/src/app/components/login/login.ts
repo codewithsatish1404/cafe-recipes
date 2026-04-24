@@ -27,19 +27,25 @@ login(form: any) {
   }).subscribe({
     next: () => {
 
-      // ✅ Fetch user after login
-      this.auth.getMe().subscribe(user => {
-        this.auth.setUser(user);
+      this.auth.getMe().subscribe({
+        next: (user) => {
 
-        // ✅ Success alert
-        Swal.fire({
-          icon: 'success',
-          title: 'Login Successful',
-          timer: 1500,
-          showConfirmButton: false
-        });
+          this.auth.setUser(user);
 
-        this.router.navigate(['/']);
+          Swal.fire({
+            icon: 'success',
+            title: 'Login Successful',
+            timer: 1500,
+            showConfirmButton: false
+          });
+
+          this.router.navigate(['/']);
+        },
+
+        error: () => {
+          // token may exist but /me may briefly fail
+          this.router.navigate(['/']);
+        }
       });
 
     },
@@ -47,14 +53,12 @@ login(form: any) {
     error: (err) => {
       const message = err?.error?.message || 'Login failed';
 
-      // ❌ Error alert
       Swal.fire({
         icon: 'error',
         title: 'Login Failed',
         text: message
       });
 
-      // ✅ Reset form after error
       form.resetForm();
     }
   });
