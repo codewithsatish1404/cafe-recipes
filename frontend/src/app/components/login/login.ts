@@ -9,9 +9,9 @@ import Swal from 'sweetalert2';
  selector:'app-login',
  standalone:true,
  imports:[
-  CommonModule,
-  FormsModule,
-  RouterLink
+   CommonModule,
+   FormsModule,
+   
  ],
  templateUrl:'./login.html',
  styleUrl:'./login.scss'
@@ -27,67 +27,38 @@ constructor(
  private router:Router
 ){}
 
-
 login(form:NgForm){
 
-if(form.invalid || this.loading){
- return;
-}
+ console.log('login fired'); // debug
 
-this.loading=true;
+ if(form.invalid || this.loading){
+   return;
+ }
 
-this.auth.login({
- email:this.email.trim(),
- password:this.password
-})
-.subscribe({
+ this.loading=true;
 
-next:(res)=>{
+ this.auth.login({
+   email:this.email,
+   password:this.password
+ }).subscribe({
 
-this.loading=false;
+   next:()=>{
+     this.loading=false;
+     this.router.navigate(['/']);
+   },
 
-/* auth service already stores:
-   token
-   user
-   admin role
-*/
+   error:(err)=>{
+     this.loading=false;
+     console.error(err);
 
-Swal.fire({
- icon:'success',
- title:'Login Successful',
- timer:1500,
- showConfirmButton:false
-});
+     Swal.fire({
+       icon:'error',
+       title:'Login Failed',
+       text: err?.error?.message || 'Login failed'
+     });
+   }
 
-form.resetForm();
-
-this.router.navigateByUrl(
- '/',
- {replaceUrl:true}
-);
-
-},
-
-error:(err)=>{
-
-this.loading=false;
-
-Swal.fire({
- icon:'error',
- title:'Login Failed',
- text:
- err?.error?.message ||
- 'Invalid credentials'
-});
-
-this.password='';
-
-form.controls['password']
-?.reset();
-
-}
-
-});
+ });
 
 }
 
