@@ -25,42 +25,52 @@ login(form: any) {
     email: this.email,
     password: this.password
   }).subscribe({
+
     next: () => {
 
-      this.auth.getMe().subscribe({
-        next: (user) => {
+      // wait for browser to persist cookie
+      setTimeout(() => {
 
-          this.auth.setUser(user);
+        this.auth.getMe().subscribe({
+          next: (user) => {
 
-          Swal.fire({
-            icon: 'success',
-            title: 'Login Successful',
-            timer: 1500,
-            showConfirmButton: false
-          });
+            this.auth.setUser(user);
 
-          this.router.navigate(['/']);
-        },
+            Swal.fire({
+              icon: 'success',
+              title: 'Login Successful',
+              timer: 1500,
+              showConfirmButton: false
+            });
 
-        error: () => {
-          // token may exist but /me may briefly fail
-          this.router.navigate(['/']);
-        }
-      });
+            this.router.navigate(['/']);
+          },
+
+          error: (err) => {
+            console.error('getMe failed:', err);
+
+            Swal.fire({
+              icon: 'error',
+              title: 'Session Error',
+              text: 'Login succeeded but user session not loaded'
+            });
+          }
+        });
+
+      }, 500); // important
 
     },
 
     error: (err) => {
-      const message = err?.error?.message || 'Login failed';
-
       Swal.fire({
         icon: 'error',
         title: 'Login Failed',
-        text: message
+        text: err?.error?.message || 'Login failed'
       });
 
       form.resetForm();
     }
+
   });
 }
 

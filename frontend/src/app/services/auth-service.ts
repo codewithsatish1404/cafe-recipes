@@ -27,18 +27,11 @@ export class AuthService {
     return this.http.post(`${this.baseUrl}/register`, data);
   }
 
-  // LOGIN (FIXED: auto load user after login)
-  login(data: any) {
-    return this.http.post(`${this.baseUrl}/login`, data, {
-      withCredentials: true
-    }).pipe(
-      tap(() => {
-        this.getMe().subscribe(user => {
-          this.userSubject.next(user);
-        });
-      })
-    );
-  }
+ login(data: any) {
+  return this.http.post(`${this.baseUrl}/login`, data, {
+    withCredentials: true
+  });
+}
 
   // LOGOUT (FIXED: clear state)
   logout() {
