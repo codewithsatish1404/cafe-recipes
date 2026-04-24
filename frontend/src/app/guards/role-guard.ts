@@ -7,9 +7,7 @@ export const roleGuard: CanActivateFn = () => {
 const auth = inject(AuthService);
 const router = inject(Router);
 
-const token = auth.getToken();
-
-if(!token){
+if(!auth.isLoggedIn()){
  router.navigate(['/login']);
  return false;
 }

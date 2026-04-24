@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 
 @Component({
  selector:'app-login',
+ standalone:true,
  imports:[
   CommonModule,
   FormsModule,
@@ -19,7 +20,6 @@ export class Login {
 
 email='';
 password='';
-
 loading=false;
 
 constructor(
@@ -27,23 +27,30 @@ constructor(
  private router:Router
 ){}
 
+
 login(form:NgForm){
 
 if(form.invalid || this.loading){
  return;
 }
 
-this.loading = true;
+this.loading=true;
 
 this.auth.login({
- email:this.email,
+ email:this.email.trim(),
  password:this.password
 })
 .subscribe({
 
-next:()=>{
+next:(res)=>{
 
 this.loading=false;
+
+/* auth service already stores:
+   token
+   user
+   admin role
+*/
 
 Swal.fire({
  icon:'success',
@@ -52,7 +59,12 @@ Swal.fire({
  showConfirmButton:false
 });
 
-this.router.navigate(['/']);
+form.resetForm();
+
+this.router.navigateByUrl(
+ '/',
+ {replaceUrl:true}
+);
 
 },
 
@@ -68,8 +80,10 @@ Swal.fire({
  'Invalid credentials'
 });
 
-this.password=''; // clear only password
-form.controls['password']?.reset();
+this.password='';
+
+form.controls['password']
+?.reset();
 
 }
 

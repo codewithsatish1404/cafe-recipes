@@ -1,23 +1,31 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm fixed-top">
 <div class="container-fluid">
 
-<a class="navbar-brand fw-bold fs-4 ms-3"
-routerLink="/">
+<!-- Brand -->
+<a
+class="navbar-brand fw-bold fs-4 ms-3"
+routerLink="/"
+(click)="closeMenu()">
 ☕ Brew & Bite
 </a>
 
+
+<!-- Mobile Toggle -->
 <button
 class="navbar-toggler border-0"
 type="button"
-(click)="toggleMenu()">
-<span class="navbar-toggler-icon">
-</span>
+(click)="toggleMenu()"
+[attr.aria-expanded]="isMenuOpen">
+<span class="navbar-toggler-icon"></span>
 </button>
+
+
 
 <div
 class="navbar-collapse"
 [class.show]="isMenuOpen">
 
+<!-- mobile close -->
 <div class="d-lg-none text-end px-3 pt-2">
 <button
 class="btn-close"
@@ -26,33 +34,42 @@ class="btn-close"
 </div>
 
 
-<ng-container
-*ngIf="auth.user$ | async as user; else guest">
+<!-- LOGGED IN USER -->
+<ng-container *ngIf="(auth.user$ | async) as user; else guest">
 
 <div class="navbar-nav mx-auto text-center">
 
-<a class="nav-link"
+<a
 routerLink="/home"
+routerLinkActive="active"
+class="nav-link"
 (click)="closeMenu()">
 🏠 Home
 </a>
 
-<a class="nav-link"
+<a
 routerLink="/recipe-list"
+routerLinkActive="active"
+class="nav-link"
 (click)="closeMenu()">
 🍽️ Menu
 </a>
 
-<a class="nav-link"
+<a
 routerLink="/setup"
+routerLinkActive="active"
+class="nav-link"
 (click)="closeMenu()">
 🔧 Setup
 </a>
 
+
+<!-- Admin only -->
 <a
-*ngIf="user?.role==='admin'"
-class="nav-link"
+*ngIf="user.role === 'admin'"
 routerLink="/admin"
+routerLinkActive="active"
+class="nav-link fw-semibold"
 (click)="closeMenu()">
 👑 Admin
 </a>
@@ -60,45 +77,61 @@ routerLink="/admin"
 </div>
 
 
-<div class="ms-auto d-flex align-items-center gap-3">
-<span>
-👤 {{user.name}}
+
+<div
+class="ms-auto d-flex align-items-center gap-3 pe-3">
+
+<span class="fw-semibold">
+👤 {{ user.name }}
 </span>
 
 <button
+type="button"
 class="btn btn-danger btn-sm"
 (click)="logout()">
 Logout
 </button>
+
 </div>
 
 </ng-container>
 
 
 
+<!-- GUEST -->
 <ng-template #guest>
 
 <div class="navbar-nav mx-auto text-center">
 
-<a class="nav-link"
-routerLink="/home">
+<a
+routerLink="/home"
+routerLinkActive="active"
+class="nav-link"
+(click)="closeMenu()">
 🏠 Home
 </a>
 
-<a class="nav-link"
-routerLink="/recipe-list">
+<a
+routerLink="/recipe-list"
+routerLinkActive="active"
+class="nav-link"
+(click)="closeMenu()">
 🍽️ Menu
 </a>
 
-<a class="nav-link"
-routerLink="/setup">
+<a
+routerLink="/setup"
+routerLinkActive="active"
+class="nav-link"
+(click)="closeMenu()">
 🔧 Setup
 </a>
 
 </div>
 
 
-<div class="ms-auto d-flex gap-2">
+
+<div class="ms-auto d-flex gap-2 pe-3">
 
 <a
 routerLink="/login"
