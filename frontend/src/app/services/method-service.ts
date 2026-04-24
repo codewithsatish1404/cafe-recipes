@@ -1,56 +1,84 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, map, Observable, catchError, throwError } from 'rxjs';
-import { environment } from '../../environments/environment.prod';
+import {
+BehaviorSubject,
+map,
+Observable,
+catchError,
+throwError
+} from 'rxjs';
 
-export interface CategoryMethod {
-  sauce?: string;
-  fillings?: string;
-  method: string;
+import { environment }
+from '../../environments/environment.prod';
+
+export interface CategoryMethod{
+ sauce?:string;
+ fillings?:string;
+ method:string;
 }
 
-export interface MethodsByCategory {
-  [key: string]: CategoryMethod;
+export interface MethodsByCategory{
+ [key:string]:CategoryMethod;
 }
 
 @Injectable({
-  providedIn: 'root',
+providedIn:'root'
 })
 export class MethodService {
 
-  private apiUrl = environment.apiUrl + '/api/methods';
+private apiUrl =
+environment.apiUrl +
+'/api/methods';
 
-  private methodsSubject = new BehaviorSubject<MethodsByCategory>({});
-  methods$ = this.methodsSubject.asObservable();
+private methodsSubject =
+new BehaviorSubject<MethodsByCategory>({});
 
-  constructor(private http: HttpClient) {}
+methods$ =
+this.methodsSubject.asObservable();
 
-  loadAllMethods(): Observable<MethodsByCategory> {
-    console.log('🔥 Service: Fetching from', this.apiUrl);
+constructor(
+ private http:HttpClient
+){}
 
-    return this.http.get<MethodsByCategory>(this.apiUrl, {
-      withCredentials: true   // ✅ FIX
-    }).pipe(
-      map(data => {
-        console.log('✅ Service: API SUCCESS', data);
-        this.methodsSubject.next(data);
-        return data;
-      }),
-      catchError((error) => {
-        console.error('❌ Service: API ERROR', error);
-        return throwError(() => error);
-      })
-    );
-  }
+loadAllMethods():
+Observable<MethodsByCategory>{
 
-  getMethodByCategory(category: string): Observable<CategoryMethod> {
-    return this.http.get<CategoryMethod>(`${this.apiUrl}/${category}`, {
-      withCredentials: true   // ✅ FIX
-    }).pipe(
-      catchError((error) => {
-        console.error('❌ Single category error:', category, error);
-        return throwError(() => error);
-      })
-    );
-  }
+return this.http
+.get<MethodsByCategory>(
+ this.apiUrl
+)
+.pipe(
+ map(data=>{
+   this.methodsSubject.next(data);
+   return data;
+ }),
+ catchError(error=>{
+   console.error(error);
+   return throwError(
+    ()=>error
+   );
+ })
+);
+
+}
+
+getMethodByCategory(
+ category:string
+):Observable<CategoryMethod>{
+
+return this.http
+.get<CategoryMethod>(
+ `${this.apiUrl}/${category}`
+)
+.pipe(
+ catchError(error=>{
+   console.error(error);
+   return throwError(
+    ()=>error
+   );
+ })
+);
+
+}
+
 }

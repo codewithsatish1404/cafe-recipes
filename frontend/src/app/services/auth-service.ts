@@ -3,66 +3,100 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment.prod';
 
-export interface User {
-  _id?: string;
-  name: string;
-  email: string;
-  role: string;
+export interface User{
+ id?:string;
+ name:string;
+ email:string;
+ role:string;
 }
 
 @Injectable({
-  providedIn: 'root',
+providedIn:'root'
 })
 export class AuthService {
 
-  private baseUrl = environment.apiUrl + '/api/auth';
+private baseUrl = environment.apiUrl + '/api/auth';
 
-  constructor(private http: HttpClient) {}
+private userSubject =
+new BehaviorSubject<User | null>(null);
 
-  private userSubject = new BehaviorSubject<User | null>(null);
-  user$ = this.userSubject.asObservable();
+user$ = this.userSubject.asObservable();
 
-  // REGISTER
-  register(data: any) {
-    return this.http.post(`${this.baseUrl}/register`, data);
-  }
+constructor(
+ private http:HttpClient
+){}
 
- login(data: any) {
-  return this.http.post(`${this.baseUrl}/login`, data, {
-    withCredentials: true
-  });
+
+// REGISTER
+register(data:any){
+ return this.http.post(
+  `${this.baseUrl}/register`,
+  data
+ );
 }
 
-  // LOGOUT (FIXED: clear state)
-  logout() {
-    return this.http.post(`${this.baseUrl}/logout`, {}, {
-      withCredentials: true
-    }).pipe(
-      tap(() => this.userSubject.next(null))
-    );
-  }
 
-  // GET CURRENT USER
-  getMe(): Observable<User> {
-    return this.http.get<User>(`${this.baseUrl}/me`, {
-      withCredentials: true
-    });
-  }
+// LOGIN
+login(data:any){
+ return this.http.post<any>(
+  `${this.baseUrl}/login`,
+  data
+ ).pipe(
+   tap(res=>{
+     localStorage.setItem(
+       'token',
+       res.token
+     );
 
-  // STATE
-  setUser(user: User | null) {
-    this.userSubject.next(user);
-  }
+     this.userSubject.next(
+       res.user
+     );
+   })
+ );
+}
 
-  getUserValue(): User | null {
-    return this.userSubject.value;
-  }
 
-  isLoggedIn(): boolean {
-    return !!this.userSubject.value;
-  }
+// LOGOUT
+logout(){
+ localStorage.removeItem('token');
+ this.userSubject.next(null);
 
-  isAdmin(): boolean {
-    return this.userSubject.value?.role === 'admin';
-  }
+ return this.http.post(
+   `${this.baseUrl}/logout`,
+   {}
+ );
+}
+
+
+// GET CURRENT USER
+getMe():Observable<User>{
+ return this.http.get<User>(
+   `${this.baseUrl}/me`
+ );
+}
+
+
+// Helpers
+setUser(user:User | null){
+ this.userSubject.next(user);
+}
+
+getUserValue(){
+ return this.userSubject.value;
+}
+
+getToken(){
+ return localStorage.getItem(
+   'token'
+ );
+}
+
+isLoggedIn(){
+ return !!this.getToken();
+}
+
+isAdmin(){
+ return this.userSubject.value?.role==='admin';
+}
+
 }

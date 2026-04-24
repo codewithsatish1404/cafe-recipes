@@ -1,25 +1,26 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '../services/auth-service';
-import { map, catchError, of } from 'rxjs';
 
-export const roleGuard: CanActivateFn = (route, state) => {
+export const roleGuard: CanActivateFn = () => {
 
-  const router = inject(Router);
-  const auth = inject(AuthService);
+const auth = inject(AuthService);
+const router = inject(Router);
 
-  return auth.getMe().pipe(
-    map(user => {
-      if (user?.role === 'admin') {
-        return true;
-      }
+const token = auth.getToken();
 
-      router.navigate(['/access-denied']);
-      return false;
-    }),
-    catchError(() => {
-      router.navigate(['/login']);
-      return of(false);
-    })
-  );
+if(!token){
+ router.navigate(['/login']);
+ return false;
+}
+
+const user = auth.getUserValue();
+
+if(user?.role === 'admin'){
+ return true;
+}
+
+router.navigate(['/access-denied']);
+return false;
+
 };

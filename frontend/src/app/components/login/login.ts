@@ -2,76 +2,66 @@ import { Component } from '@angular/core';
 import { AuthService } from '../../services/auth-service';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { FormsModule, NgForm } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 
-
 @Component({
-  selector: 'app-login',
-  imports: [CommonModule,FormsModule,RouterLink],
-  templateUrl: './login.html',
-  styleUrl: './login.scss',
+selector:'app-login',
+imports:[
+ CommonModule,
+ FormsModule,
+ RouterLink
+],
+templateUrl:'./login.html',
+styleUrl:'./login.scss',
 })
 export class Login {
 
-   email = '';
-  password = '';
+email='';
+password='';
 
-  constructor(private auth: AuthService, private router: Router) {}
+constructor(
+ private auth:AuthService,
+ private router:Router
+){}
 
+login(form:any){
 
-login(form: any) {
-  this.auth.login({
-    email: this.email,
-    password: this.password
-  }).subscribe({
+this.auth.login({
+ email:this.email,
+ password:this.password
+})
+.subscribe({
 
-    next: () => {
+next:()=>{
 
-      // wait for browser to persist cookie
-      setTimeout(() => {
+Swal.fire({
+ icon:'success',
+ title:'Login Successful',
+ timer:1500,
+ showConfirmButton:false
+});
 
-        this.auth.getMe().subscribe({
-          next: (user) => {
+this.router.navigate(['/']);
 
-            this.auth.setUser(user);
+},
 
-            Swal.fire({
-              icon: 'success',
-              title: 'Login Successful',
-              timer: 1500,
-              showConfirmButton: false
-            });
+error:(err)=>{
 
-            this.router.navigate(['/']);
-          },
+Swal.fire({
+ icon:'error',
+ title:'Login Failed',
+ text:
+ err?.error?.message ||
+ 'Login failed'
+});
 
-          error: (err) => {
-            console.error('getMe failed:', err);
+form.resetForm();
 
-            Swal.fire({
-              icon: 'error',
-              title: 'Session Error',
-              text: 'Login succeeded but user session not loaded'
-            });
-          }
-        });
+}
 
-      }, 500); // important
+});
 
-    },
-
-    error: (err) => {
-      Swal.fire({
-        icon: 'error',
-        title: 'Login Failed',
-        text: err?.error?.message || 'Login failed'
-      });
-
-      form.resetForm();
-    }
-
-  });
 }
 
 }
